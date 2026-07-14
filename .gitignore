@@ -1,0 +1,20 @@
+# NetBeans project specific
+/build/
+/dist/
+/nbproject/private/
+/nbproject/Makefile-genesis.properties
+/nbproject/Package-genesis.properties
+
+# Compiled Java class files
+*.class
+/bin/
+
+# Cryptographic outputs / payloads
+*.enc
+encrypted_image.enc
+
+# Temporary or system files
+Thumbs.db
+.DS_Store
+*.log
+*.tmp
