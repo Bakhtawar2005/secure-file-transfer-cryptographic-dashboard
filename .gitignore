@@ -17,4 +17,17 @@ encrypted_image.enc
 Thumbs.db
 .DS_Store
 *.log
+
+__pycache__/
+*.py[cod]
+*$py.class
 *.tmp
+
+# Virtual environments
+venv/
+env/
+.env/
+.venv/
+
+# Local scratch files
+scratch.py
