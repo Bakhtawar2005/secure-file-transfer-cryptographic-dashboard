@@ -126,8 +126,7 @@ def run_pipeline():
     all_processed_articles = []
     articles_added = 0
     
-    print("
---- Phase 1: Data Collection & Cleaning ---")
+    print("\n--- Phase 1: Data Collection & Cleaning ---")
     for source_name, feed_url in NEWS_SOURCES.items():
         try:
             print(f"Connecting to {source_name} RSS feed...")
@@ -266,8 +265,7 @@ def run_pipeline():
         df_excel = pd.DataFrame(all_processed_articles)
         excel_filename = "financial_news_dataset.xlsx"
         df_excel.to_excel(excel_filename, index=False, sheet_name="Pakistan Financial News")
-        print(f"
-Success! News pipeline dataset saved to Excel: {excel_filename}")
+        print(f"\nSuccess! News pipeline dataset saved to Excel: {excel_filename}")
         print(f"Total processed articles: {len(df_excel)}")
     else:
         print("No articles collected.")
@@ -276,4 +274,4 @@ Success! News pipeline dataset saved to Excel: {excel_filename}")
     db.close()
 
 if __name__ == "__main__":
-    run_pipeline()X 
+    run_pipeline()

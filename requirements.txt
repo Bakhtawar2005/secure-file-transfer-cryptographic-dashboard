@@ -6,8 +6,14 @@ statsmodels
 scikit-learn
 xgboost
 lightgbm
-# prophet
 torch
 transformers
-streamlit
-plotly
+fastapi
+uvicorn
+sqlalchemy
+openpyxl
+textblob
+requests
+beautifulsoup4
+jinja2
+joblib

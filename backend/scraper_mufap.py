@@ -290,5 +290,4 @@ def run_scraper():
         db.close()
 
 if __name__ == "__main__":
-    run_scraper()
-X 
+    run_scraper() 

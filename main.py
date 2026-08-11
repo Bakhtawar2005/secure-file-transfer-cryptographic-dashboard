@@ -509,7 +509,7 @@ def download_stock_csv(ticker: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 # Mount static files folder
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 # Root redirect to index.html
 from fastapi.responses import RedirectResponse
