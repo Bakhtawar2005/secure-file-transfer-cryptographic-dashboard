@@ -184,6 +184,9 @@
                             <tbody></tbody>
                         </table>
                     </div>
+                    <a href="#" class="download-link" id="download-commodity-csv-btn">
+                        <i class="fa-solid fa-download"></i> Download Commodity Price History (CSV)
+                    </a>
                 </div>
             </section>
             
@@ -350,6 +353,9 @@
                             <tbody></tbody>
                         </table>
                     </div>
+                    <a href="#" class="download-link" id="download-stock-csv-btn">
+                        <i class="fa-solid fa-download"></i> Download Stock Price History (CSV)
+                    </a>
                 </div>
             </section>
             
@@ -598,6 +604,30 @@
                                 <!-- Filled dynamically by JS -->
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                
+                <!-- Data Pipeline Control Panel -->
+                <div class="bento-card" style="margin-top: 20px; border-color: rgba(139, 92, 246, 0.25);">
+                    <h3 class="card-title">⚙️ Data Ingestion & News Scraping Control Panel</h3>
+                    <div class="config-grid" style="grid-template-columns: 2fr 1fr; gap: 20px; align-items: center;">
+                        <div class="info-note" style="margin-top: 0;">
+                            <p>
+                                <strong>System Pipeline Status:</strong> <span style="color: #00FF87; font-weight: bold;" id="pipeline-status">Online</span><br>
+                                <strong>Total Ingested Articles in DB:</strong> <strong id="pipeline-count" style="color: white;">--</strong><br>
+                                <strong>Last Sync Run:</strong> <span id="pipeline-last-run" style="color: #94A3B8;">--</span>
+                            </p>
+                            <div style="display: flex; gap: 20px; margin-top: 10px;">
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">🟢 Positive Sentiment: <strong id="sent-pos" style="color: #00FF87;">--</strong></span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">🟡 Neutral Sentiment: <strong id="sent-neut" style="color: #FFA500;">--</strong></span>
+                                <span style="font-size: 0.75rem; color: var(--text-muted);">🔴 Negative Sentiment: <strong id="sent-neg" style="color: #FF4B4B;">--</strong></span>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="action-btn" id="run-scraper-btn" style="background: linear-gradient(90deg, #8B5CF6 0%, #6366F1 100%); color: white !important;">
+                                Run Scraper Pipeline ⚡
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>

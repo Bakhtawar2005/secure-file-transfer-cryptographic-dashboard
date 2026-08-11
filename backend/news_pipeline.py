@@ -39,7 +39,7 @@ def normalize_date(date_str):
     if not date_str:
         return datetime.datetime.utcnow()
     
-    for fmt in ("%a, %d %b %Y %H:%M:%S %Z", "%a, %d %b %Y %H:%M:%S %z", "%d %b %Y %H:%M:%S %Z", "%Y-%m-%d %H:%M:%S"):
+    for fmt in ("%a, %d %b %Y %H:%M:%S %Z", "%a, %d %b %Y %H:%M:%S %z", "%d %b %Y %H:%M:%S %z", "%Y-%m-%d %H:%M:%S"):
         try:
             clean_str = date_str.strip()
             if clean_str.endswith(" GMT"):
@@ -126,8 +126,7 @@ def run_pipeline():
     all_processed_articles = []
     articles_added = 0
     
-    print("
---- Phase 1: Data Collection & Cleaning ---")
+    print("--- Phase 1: Data Collection & Cleaning ---")
     for source_name, feed_url in NEWS_SOURCES.items():
         try:
             print(f"Connecting to {source_name} RSS feed...")
@@ -193,6 +192,84 @@ def run_pipeline():
                 if "oil" in full_text.lower(): assets.append("Crude Oil")
                 related_assets = ", ".join(assets) if assets else "None"
                 
-                # ----------------- PREPARE FOR EXCEL -----------------
+                # ----------------- PREPARE FOR DATASET -----------------
                 article_data = {
-                    "ID": None, # Automatically filled in SQL
+                    "ID": None,
+                    "Source": source_name,
+                    "Source Type": "RSS Feed",
+                    "URL": link,
+                    "Title": title,
+                    "Description": description,
+                    "Full Text": full_text,
+                    "Published Time (UTC)": published_time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "Ingestion Time (UTC)": ingestion_time.strftime("%Y-%m-%d %H:%M:%S"),
+                    "Country": "Pakistan",
+                    "Region": "South Asia",
+                    "Language": "English",
+                    "Asset Class": "Macroeconomic" if event_type in ["Inflation", "SBP Policy News", "Budget News"] else "Equity",
+                    "Market": "Pakistan Stock Exchange (PSX)",
+                    "Sector": sectors,
+                    "Event Type": event_type,
+                    "Importance Score": importance_score,
+                    "Sentiment Score": sentiment_score,
+                    "Confidence Score": confidence_score,
+                    "Keywords": keywords,
+                    "Named Entities": entities,
+                    "Related Assets": related_assets,
+                    "Raw Response": raw_resp_str
+                }
+                all_processed_articles.append(article_data)
+                
+                # ----------------- DATA STORAGE (SQLite) -----------------
+                existing = db.query(NewsArticle).filter(NewsArticle.url == link).first()
+                if not existing:
+                    new_article = NewsArticle(
+                        source=source_name,
+                        source_type="RSS Feed",
+                        url=link,
+                        title=title,
+                        description=description,
+                        full_text=full_text,
+                        published_time=published_time,
+                        ingestion_time=ingestion_time,
+                        country="Pakistan",
+                        region="South Asia",
+                        language="English",
+                        asset_class=article_data["Asset Class"],
+                        market="Pakistan Stock Exchange (PSX)",
+                        sector=sectors,
+                        event_type=event_type,
+                        importance_score=importance_score,
+                        sentiment_score=sentiment_score,
+                        confidence_score=confidence_score,
+                        keywords=keywords,
+                        named_entities=entities,
+                        related_assets=related_assets,
+                        raw_response=raw_resp_str,
+                        content=description,
+                        published_at=published_time
+                    )
+                    db.add(new_article)
+                    articles_added += 1
+                    
+            db.commit()
+            
+        except Exception as e:
+            print(f"Error processing {source_name} feed: {e}")
+            continue
+            
+    # Save the updated table to Excel
+    if all_processed_articles:
+        df_excel = pd.DataFrame(all_processed_articles)
+        excel_filename = "financial_news_dataset.xlsx"
+        df_excel.to_excel(excel_filename, index=False, sheet_name="Pakistan Financial News")
+        print(f"\nSuccess! News pipeline dataset saved to Excel: {excel_filename}")
+        print(f"Total processed articles: {len(df_excel)}")
+    else:
+        print("No articles collected.")
+        
+    print(f"Database update complete: Added {articles_added} new articles to SQLite.")
+    db.close()
+
+if __name__ == "__main__":
+    run_pipeline()

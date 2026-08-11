@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initCommodityPortal();
     initStockPortal();
     initAdvisorPortal();
+    initPipelineControl();
 
     // ======================================================
     // 1. SIDEBAR NAVIGATION
@@ -163,6 +164,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 updateCommodityTelemetry();
                 renderCommodityMatrix();
                 renderCommodityTable();
+                document.getElementById("download-commodity-csv-btn").setAttribute("href", `/api/download/commodity/${commodity}`);
             })
             .catch(err => {
                 alert("Forecast failed: " + err.message);
@@ -541,6 +543,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 renderStockMatrix();
                 renderStockIndicators();
                 renderStockTable();
+                document.getElementById("download-stock-csv-btn").setAttribute("href", `/api/download/stock/${ticker}`);
             })
             .catch(err => {
                 alert("Stock forecast failed: " + err.message);
@@ -1211,6 +1214,43 @@ document.addEventListener("DOMContentLoaded", () => {
                 newsTable.innerHTML = "<tr><td colspan='5' style='color: #FF4B4B;'>Failed to load news.</td></tr>";
                 console.error("Error loading market trends:", err);
             });
+            
+        // Query Ingestion & scraping stats
+        fetch("/api/pipeline/status")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("pipeline-status").innerText = data.status;
+                document.getElementById("pipeline-count").innerText = data.total_articles.toLocaleString();
+                document.getElementById("pipeline-last-run").innerText = data.last_run;
+                document.getElementById("sent-pos").innerText = `${data.positive_pct}%`;
+                document.getElementById("sent-neut").innerText = `${data.neutral_pct}%`;
+                document.getElementById("sent-neg").innerText = `${data.negative_pct}%`;
+            })
+            .catch(err => console.error("Error loading pipeline status:", err));
+    }
+
+    function initPipelineControl() {
+        const scraperBtn = document.getElementById("run-scraper-btn");
+        if (scraperBtn) {
+            scraperBtn.addEventListener("click", () => {
+                scraperBtn.innerText = "Syncing Feeds... ⚡";
+                scraperBtn.disabled = true;
+                
+                fetch("/api/pipeline/trigger", { method: "POST" })
+                    .then(res => res.json())
+                    .then(data => {
+                        alert(data.message);
+                        fetchMarketTrends(); // Refresh trends lists and stats!
+                    })
+                    .catch(err => {
+                        alert("Scraper Pipeline sync failed: " + err.message);
+                    })
+                    .finally(() => {
+                        scraperBtn.innerText = "Run Scraper Pipeline ⚡";
+                        scraperBtn.disabled = false;
+                    });
+            });
+        }
     }
 
     function renderAdvisorDonut(recs) {
