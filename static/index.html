@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundForge AI Platform - Advanced Financial Intelligence Dashboard</title>
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style Sheet -->
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- ApexCharts JS -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-container">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <i class="fa-solid fa-bolt logo-icon"></i>
+                <div>
+                    <h1>FundForge AI</h1>
+                    <p>Strategic Advisory</p>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-btn active" data-portal="commodity">
+                    <i class="fa-solid fa-gem"></i>
+                    <span>Commodity Forecaster</span>
+                </button>
+                <button class="nav-btn" data-portal="stock">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>PSX Stock Analyzer</span>
+                </button>
+                <button class="nav-btn" data-portal="trends">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Market Intelligence</span>
+                </button>
+                <button class="nav-btn" data-portal="advisor">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>AI Investment Advisor</span>
+                </button>
+            </nav>
+            
+            <!-- Styled Pro Card -->
+            <div class="pro-card">
+                <h3>🚀 FundForge Pro</h3>
+                <p>Unlock advanced neural models, real-time PSX streams, and macro simulation pipelines.</p>
+                <div class="pro-badge">FYP Workspace Active</div>
+            </div>
+        </aside>
+        
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Ticker Tape -->
+            <div class="ticker-wrap">
+                <div class="ticker" id="ticker-tape">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+            </div>
+            
+            <!-- Dashboard Portals -->
+            
+            <!-- 1. COMMODITY FORECASTER -->
+            <section class="portal-section active" id="portal-commodity">
+                <div class="portal-header">
+                    <h2>Commodity Forecaster</h2>
+                    <p>Neural & Machine Learning Intelligence Dashboard</p>
+                </div>
+                
+                <!-- Setup Controller Card -->
+                <div class="control-row">
+                    <div class="control-card">
+                        <label class="control-label">Select Commodity Target</label>
+                        <div class="radio-group" id="commodity-radio-group">
+                            <label class="radio-option active"><input type="radio" name="commodity-choice" value="gold" checked> 🟡 Gold</label>
+                            <label class="radio-option"><input type="radio" name="commodity-choice" value="silver"> ⚪ Silver</label>
+                            <label class="radio-option"><input type="radio" name="commodity-choice" value="copper"> 🟫 Copper</label>
+                            <label class="radio-option"><input type="radio" name="commodity-choice" value="crude_oil"> 🛢️ Crude Oil</label>
+                            <label class="radio-option"><input type="radio" name="commodity-choice" value="natural_gas"> ⚡ Natural Gas</label>
+                            <label class="radio-option"><input type="radio" name="commodity-choice" value="wheat"> 🌾 Wheat</label>
+                        </div>
+                    </div>
+                    
+                    <div class="control-card small-control">
+                        <label class="control-label">Forecast Horizon Period</label>
+                        <select class="control-select" id="commodity-period-select">
+                            <option value="3 Months">3 Months</option>
+                            <option value="6 Months" selected>6 Months</option>
+                            <option value="1 Year">1 Year</option>
+                            <option value="2 Years">2 Years</option>
+                            <option value="5 Years">5 Years</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-card btn-control">
+                        <button class="action-btn" id="run-commodity-btn">
+                            Initiate Multi-Model Commodity Forecast 🔮
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Main Grid Layout (Hidden until triggered) -->
+                <div class="portal-grid" id="commodity-grid" style="display: none;">
+                    <!-- Left: 2/3 Chart Column -->
+                    <div class="grid-left">
+                        <div class="bento-card chart-card">
+                            <h3 class="card-title" id="commodity-chart-title">Gold Price Projection</h3>
+                            <div id="commodity-chart" style="min-height: 400px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: 1/3 Telemetry Column -->
+                    <div class="grid-right">
+                        <div class="telemetry-wrapper">
+                            <h3 class="section-title">Actionable Telemetry</h3>
+                            
+                            <!-- Model Selection Dropdown (Positioned inside telemetry column) -->
+                            <div class="bento-card select-card">
+                                <label class="control-label">🤖 Select Forecast Model</label>
+                                <select class="control-select" id="commodity-model-select">
+                                    <option value="Ensemble (Avg)" selected>Ensemble (Avg)</option>
+                                    <option value="XGBoost">XGBoost</option>
+                                    <option value="LightGBM">LightGBM</option>
+                                    <option value="LSTM">LSTM</option>
+                                    <option value="Transformer">Transformer</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Telemetry Bento Card -->
+                            <div class="bento-card telemetry-card" id="commodity-telemetry-card">
+                                <!-- Rendered dynamically by JS -->
+                            </div>
+                            
+                            <!-- Investment Simulator Card -->
+                            <div class="bento-card simulator-card">
+                                <h3>Interactive Simulator</h3>
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <span>Simulated Capital ($)</span>
+                                        <strong id="comm-sim-value">$1,000</strong>
+                                    </div>
+                                    <input type="range" class="control-slider" id="comm-sim-slider" min="100" max="50000" value="1000" step="100">
+                                </div>
+                                <div id="commodity-simulator-results">
+                                    <!-- Rendered dynamically by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Collapsible Model Grid -->
+                <div class="collapsible-section" id="commodity-collapsible-models" style="display: none;">
+                    <button class="collapse-header" id="comm-collapse-btn">
+                        <span>🔍 View Individual Neural & ML Model Telemetry Matrix</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="collapse-content" id="comm-collapse-content">
+                        <div class="model-matrix-grid" id="commodity-model-matrix">
+                            <!-- Filled dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Historical Data Panel -->
+                <div class="bento-card table-card" id="commodity-history-panel" style="display: none; margin-top: 20px;">
+                    <h3>Recent Historical Price Telemetry (Last 7 Days)</h3>
+                    <div class="table-responsive">
+                        <table class="data-table" id="commodity-history-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Open</th>
+                                    <th>High</th>
+                                    <th>Low</th>
+                                    <th>Close</th>
+                                    <th>Volume</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 2. PSX STOCK ANALYZER -->
+            <section class="portal-section" id="portal-stock">
+                <div class="portal-header">
+                    <h2>Pakistan Stock Exchange (PSX) Telemetry</h2>
+                    <p>Machine Learning and Volatility Analysis Engine</p>
+                </div>
+                
+                <!-- Setup Controller Row -->
+                <div class="control-row">
+                    <div class="control-card">
+                        <label class="control-label">Choose Ticker Target</label>
+                        <div class="radio-group" id="stock-radio-group">
+                            <label class="radio-option active"><input type="radio" name="stock-choice" value="SYS.KA" checked> 💻 SYS (PSX)</label>
+                            <label class="radio-option"><input type="radio" name="stock-choice" value="MEBL.KA"> 🏦 MEBL (PSX)</label>
+                            <label class="radio-option"><input type="radio" name="stock-choice" value="HUBC.KA"> 🔌 HUBC (PSX)</label>
+                            <label class="radio-option"><input type="radio" name="stock-choice" value="ENGRO.KA"> 🚜 ENGRO (PSX)</label>
+                            <label class="radio-option"><input type="radio" name="stock-choice" value="OGDC.KA"> 🛢️ OGDC (PSX)</label>
+                            <label class="radio-option"><input type="radio" name="stock-choice" value="FFC.KA"> 🌾 FFC (PSX)</label>
+                        </div>
+                    </div>
+                    
+                    <div class="control-card btn-control">
+                        <button class="action-btn stock-btn" id="run-stock-btn">
+                            Initiate Multi-Model Stock Forecast 🔮
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Main Grid Layout (Hidden until triggered) -->
+                <div class="portal-grid" id="stock-grid" style="display: none;">
+                    <!-- Left: 2/3 Chart Column -->
+                    <div class="grid-left">
+                        <div class="bento-card chart-card">
+                            <h3 class="card-title" id="stock-chart-title">SYS Candlestick Projection</h3>
+                            
+                            <div class="overlay-toggles">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="overlay-ma" checked>
+                                    <span>Overlay Moving Averages (MA20 & EMA50)</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" id="overlay-bb">
+                                    <span>Overlay Bollinger Bands volatility limits</span>
+                                </label>
+                            </div>
+                            
+                            <div id="stock-chart" style="min-height: 400px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right: 1/3 Telemetry Column -->
+                    <div class="grid-right">
+                        <div class="telemetry-wrapper">
+                            <h3 class="section-title">Actionable Telemetry</h3>
+                            
+                            <!-- Model Selection Dropdown -->
+                            <div class="bento-card select-card">
+                                <label class="control-label">🤖 Select Forecast Model</label>
+                                <select class="control-select" id="stock-model-select">
+                                    <option value="Ensemble (Avg)" selected>Ensemble (Avg)</option>
+                                    <option value="XGBoost">XGBoost</option>
+                                    <option value="LightGBM">LightGBM</option>
+                                    <option value="LSTM">LSTM</option>
+                                    <option value="Transformer">Transformer</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Telemetry Bento Card -->
+                            <div class="bento-card telemetry-card" id="stock-telemetry-card">
+                                <!-- Rendered dynamically by JS -->
+                            </div>
+                            
+                            <!-- Investment Simulator Card -->
+                            <div class="bento-card simulator-card">
+                                <h3>Interactive Simulator</h3>
+                                <div class="slider-group">
+                                    <div class="slider-header">
+                                        <span>Simulated Capital (Rs.)</span>
+                                        <strong id="stock-sim-value">Rs. 100,000</strong>
+                                    </div>
+                                    <input type="range" class="control-slider" id="stock-sim-slider" min="5000" max="1000000" value="100000" step="5000">
+                                </div>
+                                <div id="stock-simulator-results">
+                                    <!-- Rendered dynamically by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stock signal badge -->
+                <div class="stock-signal-container" id="stock-signal-container" style="display: none;">
+                    <!-- Rendered dynamically -->
+                </div>
+                
+                <!-- Collapsible Individual Model matrix -->
+                <div class="collapsible-section" id="stock-collapsible-models" style="display: none;">
+                    <button class="collapse-header" id="stock-collapse-btn">
+                        <span>🔍 View Individual Neural & ML Model Forecast Matrix</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="collapse-content" id="stock-collapse-content">
+                        <div class="model-matrix-grid" id="stock-model-matrix">
+                            <!-- Filled dynamically by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Diagnostics Sub-charts panel -->
+                <div class="collapsible-section" id="stock-collapsible-indicators" style="display: none;">
+                    <button class="collapse-header" id="stock-ind-collapse-btn">
+                        <span>📊 View Technical Diagnostics Indicators (RSI, MACD, OBV, ATR)</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="collapse-content" id="stock-ind-collapse-content">
+                        <div class="tabs-container">
+                            <div class="tab-selectors">
+                                <button class="tab-sel active" data-subtab="rsi">Momentum (RSI)</button>
+                                <button class="tab-sel" data-subtab="macd">Trend Momentum (MACD)</button>
+                                <button class="tab-sel" data-subtab="obv">Volume Trend (OBV)</button>
+                                <button class="tab-sel" data-subtab="atr">Volatility Span (ATR)</button>
+                            </div>
+                            
+                            <div class="tab-panels">
+                                <div class="tab-panel active" id="subtab-rsi">
+                                    <h4 class="subtab-title">Relative Strength Index (RSI 14)</h4>
+                                    <div id="stock-chart-rsi" style="min-height: 250px;"></div>
+                                </div>
+                                <div class="tab-panel" id="subtab-macd">
+                                    <h4 class="subtab-title">Moving Average Convergence Divergence (MACD)</h4>
+                                    <div id="stock-chart-macd" style="min-height: 250px;"></div>
+                                </div>
+                                <div class="tab-panel" id="subtab-obv">
+                                    <h4 class="subtab-title">On-Balance Volume (OBV) Cumulative Indicator</h4>
+                                    <div id="stock-chart-obv" style="min-height: 250px;"></div>
+                                </div>
+                                <div class="tab-panel" id="subtab-atr">
+                                    <h4 class="subtab-title">Average True Range (ATR 14) Volatility</h4>
+                                    <div id="stock-chart-atr" style="min-height: 250px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stock History Panel -->
+                <div class="bento-card table-card" id="stock-history-panel" style="display: none; margin-top: 20px;">
+                    <h3>Historical Stock Telemetry (Last 7 Days)</h3>
+                    <div class="table-responsive">
+                        <table class="data-table" id="stock-history-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Open Price</th>
+                                    <th>High Price</th>
+                                    <th>Low Price</th>
+                                    <th>Close Price</th>
+                                    <th>Volume</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 3. AI INVESTMENT ADVISOR -->
+            <section class="portal-section" id="portal-advisor">
+                <div class="portal-header">
+                    <h2>AI-Based Strategic Portfolio Allocation Engine</h2>
+                    <p>Risk Suitability Index Matching Pipeline</p>
+                </div>
+                
+                <!-- Macro Indicators Row -->
+                <div class="portal-grid-equal" style="margin-bottom: 25px;">
+                    <div class="bento-card card-macro">
+                        <div class="bento-label">KSE-100 Benchmark</div>
+                        <div class="bento-value" id="macro-kse">--</div>
+                        <p class="macro-desc">Primary market index</p>
+                    </div>
+                    <div class="bento-card card-macro">
+                        <div class="bento-label">KIBOR 6-Month Rate</div>
+                        <div class="bento-value" id="macro-kibor">--</div>
+                        <p class="macro-desc">Interbank lending benchmark</p>
+                    </div>
+                    <div class="bento-card card-macro">
+                        <div class="bento-label">Inflation CPI</div>
+                        <div class="bento-value" id="macro-inflation">--</div>
+                        <p class="macro-desc">YoY consumer index</p>
+                    </div>
+                    <div class="bento-card card-macro">
+                        <div class="bento-value small-val" id="macro-exchange">--</div>
+                        <p class="macro-desc">PKR exchange parity</p>
+                    </div>
+                </div>
+                
+                <!-- Quick AI Asset Matching Survey (Bento card) -->
+                <h3 class="section-title">⚡ Quick AI Asset Matching Survey</h3>
+                <div class="bento-card survey-card">
+                    <div class="survey-grid">
+                        <div class="survey-col">
+                            <label class="control-label">1. Select your target volatility & return style:</label>
+                            <div class="radio-survey">
+                                <label class="survey-option active">
+                                    <input type="radio" name="survey-risk" value="conservative" checked>
+                                    <span>🛡️ Conservative (Stable value, low volatility)</span>
+                                </label>
+                                <label class="survey-option">
+                                    <input type="radio" name="survey-risk" value="aggressive">
+                                    <span>🚀 Aggressive (High growth, high price action)</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="survey-col">
+                            <label class="control-label">2. What is your expected investment timeframe?</label>
+                            <div class="radio-survey">
+                                <label class="survey-option active">
+                                    <input type="radio" name="survey-horizon" value="short" checked>
+                                    <span>⏱️ Short-Term (1-3 months focus)</span>
+                                </label>
+                                <label class="survey-option">
+                                    <input type="radio" name="survey-horizon" value="long">
+                                    <span>⏳ Long-Term (1+ years outlook)</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Instant Survey Recommendation Outcome -->
+                    <div class="survey-recommendation" id="survey-result-box">
+                        <p class="survey-res-label">AI Survey Match Result:</p>
+                        <h4 class="survey-res-asset" id="survey-asset-name">🟡 Gold (Commodity)</h4>
+                        <p class="survey-res-desc" id="survey-asset-desc">Gold is currently acting as a primary store of value and safe haven asset during current market volatilities.</p>
+                    </div>
+                </div>
+                
+                <!-- Complete Portfolio Matching Profile -->
+                <h3 class="section-title">Profile Parameter Configuration</h3>
+                
+                <!-- Interactive 30-Second Risk Quiz Expander -->
+                <div class="collapsible-section" style="margin-bottom: 20px;">
+                    <button class="collapse-header" id="quiz-collapse-btn">
+                        <span>📝 Unsure of your risk tolerance? Take the 30-Second Risk Quiz</span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="collapse-content" id="quiz-collapse-content">
+                        <div class="quiz-container">
+                            <div class="quiz-q">
+                                <label class="control-label">1. What is your primary investment goal?</label>
+                                <div class="quiz-options">
+                                    <label><input type="radio" name="quiz-q1" value="low" checked> Capital Preservation (Safe, low returns)</label>
+                                    <label><input type="radio" name="quiz-q1" value="med"> Balanced Growth (Moderate returns & risk)</label>
+                                    <label><input type="radio" name="quiz-q1" value="high"> Maximum Capital Appreciation (High risk, high returns)</label>
+                                </div>
+                            </div>
+                            <div class="quiz-q">
+                                <label class="control-label">2. If your portfolio dropped 10% in a month, you would:</label>
+                                <div class="quiz-options">
+                                    <label><input type="radio" name="quiz-q2" value="low" checked> Panic and sell everything immediately</label>
+                                    <label><input type="radio" name="quiz-q2" value="med"> Wait and monitor carefully</label>
+                                    <label><input type="radio" name="quiz-q2" value="high"> Invest more capital at lower prices</label>
+                                </div>
+                            </div>
+                            <div class="quiz-q">
+                                <label class="control-label">3. What is your planned investment horizon?</label>
+                                <div class="quiz-options">
+                                    <label><input type="radio" name="quiz-q3" value="low" checked> Short-term (< 1 year)</label>
+                                    <label><input type="radio" name="quiz-q3" value="med"> Medium-term (1 - 3 years)</label>
+                                    <label><input type="radio" name="quiz-q3" value="high"> Long-term (> 3 years)</label>
+                                </div>
+                            </div>
+                            <button class="action-btn" id="calc-risk-btn" style="margin-top: 15px;">Calculate My Risk Profile</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bento-card">
+                    <div class="config-grid">
+                        <div class="config-col">
+                            <div class="input-group">
+                                <label class="control-label">Investment Capital Amount (PKR)</label>
+                                <input type="number" class="control-input" id="advisor-capital" value="100000" min="5000" step="5000">
+                            </div>
+                            <div class="input-group">
+                                <label class="control-label">Risk Tolerance Profile</label>
+                                <select class="control-select" id="advisor-risk">
+                                    <option value="Low">Low</option>
+                                    <option value="Medium" selected>Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="config-col">
+                            <div class="input-group">
+                                <label class="control-label">Compliance / Regulatory Preference</label>
+                                <select class="control-select" id="advisor-compliance">
+                                    <option value="Islamic" selected>Islamic</option>
+                                    <option value="Conventional">Conventional</option>
+                                    <option value="Any">Any</option>
+                                </select>
+                            </div>
+                            <div class="info-note">
+                                <p>
+                                    <strong>Islamic:</strong> Filters Shariah-compliant asset classes only.<br>
+                                    <strong>Conventional:</strong> Normal equity/debt assets.<br>
+                                    <strong>Any:</strong> Broad allocation across all asset classifications.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="action-btn advisor-btn" id="generate-advisor-btn" style="margin-top: 20px;">
+                        Generate AI Portfolio Allocation 💼
+                    </button>
+                </div>
+                
+                <!-- Advisor Results Grid -->
+                <div class="portal-grid" id="advisor-results-grid" style="display: none; margin-top: 30px;">
+                    <!-- Left: Allocation cards -->
+                    <div class="grid-left" id="advisor-allocation-list">
+                        <!-- Filled by JS -->
+                    </div>
+                    
+                    <!-- Right: Donut Chart -->
+                    <div class="grid-right">
+                        <div class="bento-card chart-card">
+                            <h3 class="card-title">Portfolio Distribution Summary</h3>
+                            <div id="advisor-donut-chart" style="min-height: 350px;"></div>
+                            
+                            <div class="glossary-card">
+                                <h4>🎓 Investment Glossary Guide</h4>
+                                <p>Hover over the metrics to learn what they mean:</p>
+                                <div class="glossary-list">
+                                    <span class="tooltip-span" title="Standard deviation of past daily returns. Low volatility means steady prices (safer), while high volatility means large fluctuations (riskier).">Volatility (Risk Level)</span>
+                                    <span class="tooltip-span" title="Percentage rate of return the AI model forecasts over the next 30 days based on technical indicators and current macroeconomic trends.">AI Forecast Return</span>
+                                    <span class="tooltip-span" title="Calculated weighted suitability score based on your risk tolerance, KSE-100 trends, inflation CPI index, and recent news sentiment.">AI Confidence Score</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. MARKET INTELLIGENCE -->
+            <section class="portal-section" id="portal-trends">
+                <div class="portal-header">
+                    <h2>Market Intelligence & Leaders</h2>
+                    <p>AI Predicted Gainers, Decliners, and Recent News Sentiment Signals</p>
+                </div>
+                
+                <div class="portal-grid" style="grid-template-columns: 1fr 1fr;">
+                    <!-- Top Predicted Gainers -->
+                    <div class="bento-card table-card">
+                        <h3>📈 Top AI Predicted Gainers</h3>
+                        <div class="table-responsive">
+                            <table class="data-table" id="gainer-table">
+                                <thead>
+                                    <tr>
+                                        <th>Asset Name</th>
+                                        <th>Asset Type</th>
+                                        <th>Sentiment</th>
+                                        <th>Proj. Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Filled dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Predicted Decliners -->
+                    <div class="bento-card table-card">
+                        <h3>📉 Top AI Predicted Decliners</h3>
+                        <div class="table-responsive">
+                            <table class="data-table" id="decliner-table">
+                                <thead>
+                                    <tr>
+                                        <th>Asset Name</th>
+                                        <th>Asset Type</th>
+                                        <th>Sentiment</th>
+                                        <th>Proj. Return</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Filled dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent News Sentiment Table -->
+                <div class="bento-card table-card" style="margin-top: 20px;">
+                    <h3>📰 Recent AI News Sentiment Signals</h3>
+                    <div class="table-responsive">
+                        <table class="data-table" id="trends-news-table">
+                            <thead>
+                                <tr>
+                                    <th>Headline</th>
+                                    <th>Sentiment Polarity</th>
+                                    <th>Calculated Score</th>
+                                    <th>Risk-Impact</th>
+                                    <th>Ingestion Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Filled dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Core Application Logic -->
+    <script src="/static/app.js"></script>
+</body>
+</html>
