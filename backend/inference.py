@@ -67,7 +67,8 @@ def run_inference(commodity_name, model_type):
     today_close = df['Close'].iloc[-1]
     last_date = df.index[-1].strftime('%Y-%m-%d')
     
-    models_dir = './models'
+    backend_dir = os.path.dirname(__file__)
+    models_dir = os.path.join(backend_dir, 'models')
     
     if model_type in ['XGBoost', 'LightGBM']:
         # For tree models, we just need the single most recent row
